@@ -2,111 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Instagram Login</title>
+  <title>Age Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      background: #f2f2f2;
       display: flex;
-      height: 100vh;
       justify-content: center;
       align-items: center;
+      height: 100vh;
       margin: 0;
     }
 
     .container {
-      background-color: white;
-      padding: 30px 40px;
-      border: 1px solid #ddd;
+      background: #fff;
+      padding: 30px;
       border-radius: 10px;
-      width: 300px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
     }
 
-    .title {
-      text-align: center;
-      font-family: 'Georgia', serif;
-      font-size: 28px;
+    h2 {
       margin-bottom: 20px;
     }
 
-    .input-field {
-      width: 100%;
+    input[type="date"] {
       padding: 10px;
-      margin: 8px 0;
+      width: 100%;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
 
-    .login-btn {
-      width: 100%;
-      background-color: #0095f6;
-      color: white;
-      padding: 10px;
+    button {
+      padding: 10px 20px;
       border: none;
+      background: #0095f6;
+      color: white;
       border-radius: 5px;
-      margin-top: 10px;
-      font-weight: bold;
       cursor: pointer;
     }
 
-    .login-btn:hover {
-      background-color: #007cd6;
+    button:hover {
+      background: #007cd6;
     }
 
-    .options {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      margin-top: 10px;
-    }
-
-    .options a {
-      color: #0095f6;
-      text-decoration: none;
-    }
-
-    .signup-text {
-      text-align: center;
-      font-size: 13px;
+    #result {
       margin-top: 20px;
-    }
-
-    .signup-text a {
-      color: #0095f6;
-      text-decoration: none;
+      font-size: 16px;
+      color: #333;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h2 class="title">Instagram</h2>
-    <input type="text" id="username" placeholder="Username" class="input-field">
-    <input type="password" id="password" placeholder="Password" class="input-field">
-    <button class="login-btn" onclick="handleLogin()">Log in</button>
-
-    <div class="options">
-      <label><input type="checkbox" id="remember"> Remember me</label>
-      <a href="#">Forgot Password?</a>
-    </div>
-
-    <p class="signup-text">
-      Don’t have an account? <a href="#">Sign up here</a>
-    </p>
+    <h2>Age Calculator</h2>
+    <input type="date" id="dob" max="">
+    <button onclick="calculateAge()">Calculate Age</button>
+    <div id="result"></div>
   </div>
 
   <script>
-    function handleLogin() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
+    // Set max date to today
+    document.getElementById("dob").max = new Date().toISOString().split("T")[0];
 
-      if (username === "" || password === "") {
-        alert("Please enter both username and password.");
-      } else {
-        alert(`Logged in as ${username}`);
-        // You can redirect or do further validation here
+    function calculateAge() {
+      const dobInput = document.getElementById('dob').value;
+      const resultDiv = document.getElementById('result');
+
+      if (!dobInput) {
+        resultDiv.innerText = "Please select your date of birth.";
+        return;
       }
+
+      const dob = new Date(dobInput);
+      const today = new Date();
+
+      if (dob > today) {
+        resultDiv.innerText = "Date of birth cannot be in the future.";
+        return;
+      }
+
+      let years = today.getFullYear() - dob.getFullYear();
+      let months = today.getMonth() - dob.getMonth();
+      let days = today.getDate() - dob.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      resultDiv.innerText = 
+        `You are ${years} years, ${months} months, and ${days} days old.`;
     }
   </script>
 
